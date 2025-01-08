@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json(), cors());
 
 // Database connection
-connectDB('mongodb://127.0.0.1:27017/userDB');  // process.env.MONGO_URI
+connectDB('mongodb+srv://Darshan:T35tpassword@cluster0.jgw8y.mongodb.net/userDB');  // 'mongodb://127.0.0.1:27017/userDB'   // process.env.MONGO_URI
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
