@@ -1,6 +1,8 @@
 const express = require('express');
 const { body } = require('express-validator');
+const { validateUser, validateUserUpdate } = require('../validation/userValidation');
 const {
+    testUrl,
     registerUser,
     loginUser,
     getAllUsers,
@@ -38,11 +40,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/register', [
-    body('name').notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Valid email is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-], registerUser);
+router.post('/register', validateUser, registerUser);
 
 /**
  * @swagger
@@ -88,6 +86,8 @@ router.post('/login', [
  *         description: Unauthorized
  */
 router.get('/', authenticateToken, getAllUsers);
+
+router.get('/test', testUrl);
 
 /**
  * @swagger
@@ -145,11 +145,7 @@ router.get('/:id', authenticateToken, getUserById);
  *       404:
  *         description: User not found
  */
-router.put('/:id', authenticateToken, [
-    body('name').optional().notEmpty().withMessage('Name cannot be empty'),
-    body('email').optional().isEmail().withMessage('Valid email is required'),
-    body('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-], updateUser);
+router.put('/:id', authenticateToken, validateUserUpdate, updateUser);
 
 /**
  * @swagger
