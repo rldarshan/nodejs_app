@@ -4,6 +4,8 @@ const { validationResult } = require('express-validator');
 const User = require('../models/userModel');
 const logger = require('../config/logger');
 
+JWT_SECRET = process.env.JWT_SECRET || 'T35t@JWT#Secrete';
+
 // Register a new user
 const registerUser = async (req, res) => {
     const errors = validationResult(req);
@@ -17,7 +19,7 @@ const registerUser = async (req, res) => {
         await user.save();
 
         logger.info('User registered successfully', { email });
-        res.status(201).send('User registered successfully');
+        res.status(201).send({message:'User registered successfully'});
     } catch (err) {
         logger.error('Error registering user:', err);
         res.status(400).send(err.message);
@@ -37,10 +39,10 @@ const loginUser = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return res.status(400).send('Invalid password');
 
-        const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ _id: user._id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
 
         logger.info('User logged in successfully', { email });
-        res.header('Authorization', token).send({ token });
+        res.header('Authorization', token).send({ message: "Login successful", "jwtToken": token });
     } catch (err) {
         logger.error('Error logging in user:', err);
         res.status(400).send(err.message);
