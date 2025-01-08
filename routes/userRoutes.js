@@ -87,7 +87,7 @@ router.post('/login', [
  *       401:
  *         description: Unauthorized
  */
-router.get('/', authenticateToken, getAllUsers);
+router.get('/', getAllUsers);
 
 /**
  * @swagger

@@ -50,6 +50,7 @@ const loginUser = async (req, res) => {
 // CRUD Operations
 const getAllUsers = async (req, res) => {
     try {
+        logger.info('Fetching all users');
         const users = await User.find();
         res.json(users);
     } catch (err) {
